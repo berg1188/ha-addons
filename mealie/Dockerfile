@@ -17,9 +17,11 @@ FROM ghcr.io/mealie-recipes/mealie:latest
 # run. Symlink it to /data (the add-on's persistent dir) either way.
 RUN ln -s /data /app/data
 
+# The image drops to PUID/PGID on startup, but /data is root-owned on HAOS,
+# so keep it root to avoid permission errors writing the data dir.
 ENV DB_ENGINE=sqlite \
     ALLOW_SIGNUP=false \
     TZ=America/New_York \
-    PUID=1000 \
-    PGID=1000 \
+    PUID=0 \
+    PGID=0 \
     BASE_URL=http://homeassistant.local:9925
