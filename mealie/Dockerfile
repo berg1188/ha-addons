@@ -13,7 +13,9 @@
 # - sqlite keeps this a single container. Plenty for family use.
 FROM ghcr.io/mealie-recipes/mealie:latest
 
-RUN rmdir /app/data && ln -s /data /app/data
+# The upstream image doesn't pre-create /app/data; Mealie creates it on first
+# run. Symlink it to /data (the add-on's persistent dir) either way.
+RUN ln -s /data /app/data
 
 ENV DB_ENGINE=sqlite \
     ALLOW_SIGNUP=false \
